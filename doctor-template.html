@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Notes Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #f0f4f8;
+        color: #1a202c;
+        min-height: 100vh;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      header {
+        background: linear-gradient(135deg, #1a56db 0%, #0d3b8e 100%);
+        color: white;
+        padding: 18px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      header h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+      header span {
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 28px auto;
+        padding: 0 16px 48px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px 28px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+
+      .card-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #1a56db;
+        margin-bottom: 14px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e8f0fe;
+      }
+
+      label {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      input[type="text"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 9px 13px;
+        border: 1.5px solid #d1dbe8;
+        border-radius: 7px;
+        font-size: 1rem;
+        color: #1a202c;
+        background: #f8fafc;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        outline: none;
+        font-family: inherit;
+        line-height: 1.6;
+      }
+      input[type="text"]:focus,
+      textarea:focus,
+      select:focus {
+        border-color: #1a56db;
+        box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
+        background: white;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 70px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+      }
+
+      /* Visual Acuity */
+      .va-row {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 10px;
+        align-items: end;
+      }
+      .va-eye-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .eye-badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+      .eye-badge.od {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .eye-badge.os {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .va-slash {
+        font-size: 1.3rem;
+        color: #94a3b8;
+        padding-bottom: 8px;
+        text-align: center;
+      }
+      .va-group {
+        display: flex;
+        gap: 6px;
+        align-items: end;
+      }
+      .va-group input {
+        flex: 1;
+      }
+      .va-group .va-denom {
+        padding-bottom: 8px;
+        font-size: 1.1rem;
+        color: #64748b;
+      }
+      .va-fixed {
+        padding-bottom: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #475569;
+        min-width: 28px;
+        text-align: center;
+      }
+
+      /* Slit Lamp Table */
+      .slit-lamp-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 4px;
+      }
+      .slit-lamp-table th,
+      .slit-lamp-table td {
+        padding: 10px 10px;
+        text-align: center;
+        border: 1px solid #e2e8f0;
+      }
+      .slit-lamp-table thead tr th {
+        background: #f1f5f9;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #475569;
+      }
+      .slit-lamp-table thead tr th.od-head {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .slit-lamp-table thead tr th.os-head {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .slit-lamp-table thead tr th.struct-head {
+        background: #f8fafc;
+        color: #64748b;
+      }
+      .slit-lamp-table tbody tr:nth-child(even) td {
+        background: #f8fafc;
+      }
+      .slit-lamp-table tbody tr:hover td {
+        background: #eff6ff;
+      }
+      .slit-lamp-table td.struct-name {
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #475569;
+        background: #f1f5f9;
+        width: 110px;
+      }
+      .slit-lamp-table td input {
+        width: 100%;
+        border: 1.5px solid #d1dbe8;
+        border-radius: 6px;
+        padding: 7px 8px;
+        font-size: 0.97rem;
+        text-align: center;
+        background: white;
+        outline: none;
+        font-family: inherit;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .slit-lamp-table td input:focus {
+        border-color: #1a56db;
+        box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
+      }
+
+      /* Findings grid */
+      .findings-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 580px) {
+        .findings-grid,
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+        .va-row {
+          grid-template-columns: 1fr;
+        }
+        .va-slash {
+          display: none;
+        }
+      }
+
+      /* Actions */
+      .actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+      button {
+        padding: 11px 28px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition:
+          background 0.18s,
+          transform 0.1s;
+      }
+      button:active {
+        transform: scale(0.97);
+      }
+      .btn-primary {
+        background: #1a56db;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #1648c0;
+      }
+      .btn-secondary {
+        background: #e2e8f0;
+        color: #374151;
+      }
+      .btn-secondary:hover {
+        background: #cbd5e1;
+      }
+      .btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .btn-danger:hover {
+        background: #fecaca;
+      }
+      .btn-copy {
+        background: #1a56db;
+        color: white;
+        border: none;
+      }
+      .btn-copy:hover {
+        background: #1648c0;
+      }
+
+      /* Print preview */
+      .print-area {
+        display: none;
+      }
+      @media print {
+        body {
+          background: white;
+        }
+        header,
+        .actions,
+        .card-title {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .print-hide {
+          display: none;
+        }
+      }
+
+      /* Toast */
+      #toast {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        background: #1a56db;
+        color: white;
+        padding: 14px 24px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+        transform: translateY(80px);
+        opacity: 0;
+        transition:
+          transform 0.3s,
+          opacity 0.3s;
+        z-index: 999;
+      }
+      #toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Doctor Notes Template</h1>
+      <span id="datetime"></span>
+    </header>
+
+    <div class="container">
+      <!-- Presentation -->
+      <div class="card">
+        <div class="card-title">Patient Presented With</div>
+        <textarea
+          id="presentedWith"
+          placeholder="Chief complaint / presenting complaint..."></textarea>
+      </div>
+
+      <!-- KCO & O/E -->
+      <div class="card">
+        <div class="grid-2">
+          <div>
+            <div class="card-title">KCO (Known Case Of)</div>
+            <textarea id="kco" placeholder="Known diagnoses..." style="min-height: 80px"></textarea>
+          </div>
+          <div>
+            <div class="card-title">O/E (On Examination)</div>
+            <textarea
+              id="oe"
+              placeholder="General examination findings..."
+              style="min-height: 80px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Acuity -->
+      <div class="card">
+        <div class="card-title">UAVA — Unaided Visual Acuity</div>
+        <div class="va-row">
+          <div>
+            <div class="va-eye-label"><span class="eye-badge od">OD — Right Eye</span></div>
+            <div class="va-group">
+              <input type="text" id="vaODNum" placeholder="20" />
+              <span class="va-denom">/</span>
+              <span class="va-fixed">20</span>
+            </div>
+          </div>
+          <div class="va-slash">/</div>
+          <div>
+            <div class="va-eye-label"><span class="eye-badge os">OS — Left Eye</span></div>
+            <div class="va-group">
+              <input type="text" id="vaOSNum" placeholder="20" />
+              <span class="va-denom">/</span>
+              <span class="va-fixed">20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slit Lamp Examination -->
+      <div class="card">
+        <div class="card-title">Slit Lamp Examination</div>
+        <table class="slit-lamp-table">
+          <thead>
+            <tr>
+              <th class="od-head">OD (Right)</th>
+              <th class="struct-head">Structure</th>
+              <th class="os-head">OS (Left)</th>
+            </tr>
+          </thead>
+          <tbody id="slitLampBody">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Fundus & Orthoptic -->
+      <div class="card">
+        <div class="findings-grid">
+          <div>
+            <div class="card-title">Fundus</div>
+            <textarea id="fundus" placeholder="Fundus findings..."></textarea>
+          </div>
+          <div>
+            <div class="card-title">Orthoptic</div>
+            <textarea id="orthoptic" placeholder="Orthoptic findings..."></textarea>
+          </div>
+          <div>
+            <div class="card-title">FP (Fundus Photography)</div>
+            <textarea id="fp" placeholder="FP findings..."></textarea>
+          </div>
+          <div>
+            <div class="card-title">Abnormal Head Posture</div>
+            <textarea id="ahp" placeholder="Head posture findings..."></textarea>
+          </div>
+          <div>
+            <div class="card-title">Nystagmus</div>
+            <textarea id="nystagmus" placeholder="Nystagmus findings..."></textarea>
+          </div>
+          <div>
+            <div class="card-title">EOM (Extra Ocular Movements)</div>
+            <textarea id="eom" placeholder="EOM findings..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARCT -->
+      <div class="card">
+        <div class="card-title">ARCT</div>
+        <textarea id="arct" placeholder="ARCT findings..."></textarea>
+      </div>
+
+      <!-- Impression & Plan -->
+      <div class="card">
+        <div class="grid-2">
+          <div>
+            <div class="card-title">IMP (Impression / Diagnosis)</div>
+            <textarea
+              id="imp"
+              placeholder="Clinical impression / diagnosis..."
+              style="min-height: 100px"></textarea>
+          </div>
+          <div>
+            <div class="card-title">Plan</div>
+            <textarea
+              id="plan"
+              placeholder="Management plan, investigations, referrals..."
+              style="min-height: 100px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="card print-hide">
+        <div class="actions">
+          <button class="btn-danger" onclick="clearForm()">Clear Form</button>
+          <button class="btn-secondary" onclick="window.print()">Print / Save PDF</button>
+          <button class="btn-copy" onclick="copyAll()">Copy All</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+      // ── Slit lamp rows (structure: [label, OD default, OS default]) ──
+      const slitRows = [
+        ["Cornea", "Clear", "Clear"],
+        ["AC", "D&Q", "D&Q"],
+        ["Iris", "Healthy", "Healthy"],
+        ["Pupil", "RRR, (-) APD", "RRR, (-) APD"],
+        ["Lens", "Clear", "Clear"],
+      ];
+
+      function buildSlitLamp() {
+        const tbody = document.getElementById("slitLampBody");
+        slitRows.forEach(([struct, odDef, osDef]) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+        <td><input type="text" value="${odDef}" data-struct="${struct}" data-side="od" /></td>
+        <td class="struct-name">${struct}</td>
+        <td><input type="text" value="${osDef}" data-struct="${struct}" data-side="os" /></td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // ── Date/time header ──
+      function updateClock() {
+        const el = document.getElementById("datetime");
+        const now = new Date();
+        el.textContent = now.toLocaleString("en-GB", {
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        });
+      }
+
+      function v(id) {
+        return document.getElementById(id).value;
+      }
+      function sv(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.value = val ?? "";
+      }
+
+      function line(label, val) {
+        return val && val.trim() ? label + ": " + val.trim() + "\n" : "";
+      }
+
+      function copyAll() {
+        const vaOD = (v("vaODNum") || "__") + "/20";
+        const vaOS = (v("vaOSNum") || "__") + "/20";
+
+        let slitText = "\nSLIT LAMP:\n";
+        slitText += "Structure".padEnd(14) + "OD".padEnd(22) + "OS\n";
+        slitText += "-".repeat(54) + "\n";
+        document.querySelectorAll("#slitLampBody tr").forEach((tr) => {
+          const inputs = tr.querySelectorAll("input");
+          const struct = tr.querySelector(".struct-name")?.textContent ?? "";
+          const od = inputs[0]?.value ?? "";
+          const os = inputs[1]?.value ?? "";
+          slitText += struct.padEnd(14) + od.padEnd(22) + os + "\n";
+        });
+
+        let text = "";
+        text += line("PATIENT PRESENTED WITH", v("presentedWith"));
+        text += line("KCO", v("kco"));
+        text += line("O/E", v("oe"));
+        text += "UAVA: OD: " + vaOD + "   OS: " + vaOS + "\n";
+        text += slitText;
+        text += line("\nFUNDUS", v("fundus"));
+        text += line("ORTHOPTIC", v("orthoptic"));
+        text += line("FP", v("fp"));
+        text += line("ABNORMAL HEAD POSTURE", v("ahp"));
+        text += line("NYSTAGMUS", v("nystagmus"));
+        text += line("EOM", v("eom"));
+        text += line("ARCT", v("arct"));
+        text += line("\nIMP", v("imp"));
+        text += line("PLAN", v("plan"));
+
+        navigator.clipboard
+          .writeText(text.trim())
+          .then(() => {
+            showToast("Copied to clipboard!");
+          })
+          .catch(() => {
+            // fallback for older browsers
+            const ta = document.createElement("textarea");
+            ta.value = text.trim();
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            showToast("Copied to clipboard!");
+          });
+      }
+
+      function clearForm() {
+        if (!confirm("Clear all fields and reset to defaults?")) return;
+        [
+          "presentedWith",
+          "kco",
+          "oe",
+          "vaODNum",
+          "vaODDen",
+          "vaOSNum",
+          "vaOSDen",
+          "fundus",
+          "orthoptic",
+          "fp",
+          "ahp",
+          "nystagmus",
+          "eom",
+          "arct",
+          "imp",
+          "plan",
+        ].forEach((id) => sv(id, ""));
+        document.querySelectorAll("#slitLampBody input").forEach((inp) => {
+          const row = slitRows.find((r) => r[0] === inp.dataset.struct);
+          if (row) inp.value = inp.dataset.side === "od" ? row[1] : row[2];
+        });
+        showToast("Form cleared.");
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2800);
+      }
+
+      // ── Init ──
+      buildSlitLamp();
+      updateClock();
+      setInterval(updateClock, 60000);
+    </script>
+  </body>
+</html>
