@@ -6,571 +6,655 @@
     <title>Doctor Notes Template</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg:        #f4f5f9;
+        --surface:   #ffffff;
+        --border:    #e4e7ef;
+        --text:      #0f172a;
+        --muted:     #64748b;
+        --faint:     #94a3b8;
+        --od:        #2563eb;
+        --od-light:  #eff6ff;
+        --od-mid:    #bfdbfe;
+        --os:        #059669;
+        --os-light:  #f0fdf4;
+        --os-mid:    #a7f3d0;
+        --accent:    #4f46e5;
+        --accent-lt: #eef2ff;
+        --danger:    #dc2626;
+        --danger-lt: #fef2f2;
+        --radius:    14px;
+        --radius-sm: 8px;
       }
+
+      html { scroll-behavior: smooth; }
 
       body {
-        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-        background: #f0f4f8;
-        color: #1a202c;
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
         min-height: 100vh;
         font-size: 15px;
-        line-height: 1.6;
+        line-height: 1.65;
+        padding-bottom: 100px;
       }
 
+      /* ── HEADER ── */
       header {
-        background: linear-gradient(135deg, #1a56db 0%, #0d3b8e 100%);
-        color: white;
-        padding: 18px 32px;
-        display: flex;
+        background: #0f172a;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        padding: 0 36px;
+        height: 60px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
       }
-      header h1 {
-        font-size: 1.4rem;
-        font-weight: 700;
-        letter-spacing: 0.02em;
+      header::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(79,70,229,0.15) 0%, transparent 50%, rgba(37,99,235,0.1) 100%);
+        pointer-events: none;
       }
-      header span {
-        font-size: 0.85rem;
-        opacity: 0.8;
+      .header-title {
+        grid-column: 2;
+        color: #f8fafc;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      .header-date {
+        justify-self: end;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        font-weight: 400;
+        font-family: "DM Mono", monospace;
       }
 
-      .container {
-        max-width: 960px;
-        margin: 28px auto;
-        padding: 0 16px 48px;
+      /* ── LAYOUT ── */
+      .page {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 36px 20px 0;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 12px;
       }
 
-      .card {
-        background: white;
-        border-radius: 12px;
-        padding: 24px 28px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      /* ── SECTION ── */
+      .section {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+      }
+      .section:focus-within {
+        box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        border-color: rgba(79,70,229,0.35);
       }
 
-      .card-title {
-        font-size: 0.75rem;
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 22px 0;
+      }
+      .section-tag {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: var(--accent-lt);
+        padding: 3px 10px;
+        border-radius: 20px;
+        white-space: nowrap;
+      }
+      .section-rule {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .section-body {
+        padding: 16px 22px 20px;
+      }
+
+      /* ── INPUTS ── */
+      textarea,
+      input[type="text"] {
+        width: 100%;
+        font-family: inherit;
+        font-size: 0.97rem;
+        color: var(--text);
+        background: transparent;
+        border: none;
+        border-bottom: 1.5px solid var(--border);
+        border-radius: 0;
+        padding: 6px 2px 8px;
+        outline: none;
+        transition: border-color 0.2s;
+        line-height: 1.6;
+        resize: none;
+      }
+      textarea { min-height: 64px; resize: vertical; }
+      textarea:focus,
+      input[type="text"]:focus {
+        border-bottom-color: var(--accent);
+      }
+      ::placeholder { color: var(--faint); }
+
+      /* ── TWO-COL ── */
+      .cols-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 32px;
+      }
+      .cols-2 > div + div {
+        border-left: 1px solid var(--border);
+        padding-left: 32px;
+      }
+
+      /* ── FIELD LABEL ── */
+      .field-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      /* ── VISUAL ACUITY ── */
+      .va-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .va-eye {
+        border-radius: var(--radius-sm);
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .va-eye.od { background: var(--od-light); border: 1px solid var(--od-mid); }
+      .va-eye.os { background: var(--os-light); border: 1px solid var(--os-mid); }
+      .va-eye-label {
+        font-size: 0.7rem;
         font-weight: 700;
         letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: #1a56db;
-        margin-bottom: 14px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #e8f0fe;
       }
-
-      label {
-        display: block;
-        font-size: 0.78rem;
-        font-weight: 600;
-        color: #4a5568;
-        margin-bottom: 5px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-
-      input[type="text"],
-      textarea,
-      select {
-        width: 100%;
-        padding: 9px 13px;
-        border: 1.5px solid #d1dbe8;
-        border-radius: 7px;
-        font-size: 1rem;
-        color: #1a202c;
-        background: #f8fafc;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
-        outline: none;
-        font-family: inherit;
-        line-height: 1.6;
-      }
-      input[type="text"]:focus,
-      textarea:focus,
-      select:focus {
-        border-color: #1a56db;
-        box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
-        background: white;
-      }
-      textarea {
-        resize: vertical;
-        min-height: 70px;
-      }
-
-      .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-      .grid-3 {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 16px;
-      }
-
-      /* Visual Acuity */
-      .va-row {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        gap: 10px;
-        align-items: end;
-      }
-      .va-eye-label {
+      .va-eye.od .va-eye-label { color: var(--od); }
+      .va-eye.os .va-eye-label { color: var(--os); }
+      .va-fraction {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 6px;
+        gap: 6px;
       }
-      .eye-badge {
-        display: inline-block;
-        padding: 2px 10px;
-        border-radius: 20px;
+      .va-fraction input {
+        flex: 1;
+        font-size: 1.4rem;
+        font-weight: 600;
+        font-family: "DM Mono", monospace;
+        text-align: center;
+        padding: 4px 6px 6px;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid;
+        outline: none;
+        transition: border-color 0.2s, opacity 0.2s;
+        min-width: 0;
+      }
+      .va-eye.od .va-fraction input { border-color: var(--od-mid); color: var(--od); }
+      .va-eye.os .va-fraction input { border-color: var(--os-mid); color: var(--os); }
+      .va-eye.od .va-fraction input:focus { border-color: var(--od); }
+      .va-eye.os .va-fraction input:focus { border-color: var(--os); }
+      .va-slash {
+        font-size: 1.6rem;
+        font-weight: 300;
+        color: var(--faint);
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .va-denom {
+        font-size: 1.4rem;
+        font-weight: 700;
+        font-family: "DM Mono", monospace;
+        color: var(--muted);
+        flex-shrink: 0;
+        padding-bottom: 4px;
+      }
+
+      /* ── SLIT LAMP ── */
+      .slit-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .slit-table thead th {
+        padding: 10px 14px;
         font-size: 0.7rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
       }
-      .eye-badge.od {
-        background: #dbeafe;
-        color: #1e40af;
-      }
-      .eye-badge.os {
-        background: #dcfce7;
-        color: #166534;
-      }
-      .va-slash {
-        font-size: 1.3rem;
-        color: #94a3b8;
-        padding-bottom: 8px;
+      .slit-table thead th.col-od {
+        color: var(--od);
+        background: var(--od-light);
+        border-radius: var(--radius-sm) 0 0 0;
         text-align: center;
       }
-      .va-group {
-        display: flex;
-        gap: 6px;
-        align-items: end;
+      .slit-table thead th.col-struct {
+        color: var(--muted);
+        background: #f8fafc;
+        text-align: center;
+        width: 120px;
       }
-      .va-group input {
-        flex: 1;
-      }
-      .va-group .va-denom {
-        padding-bottom: 8px;
-        font-size: 1.1rem;
-        color: #64748b;
-      }
-      .va-fixed {
-        padding-bottom: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #475569;
-        min-width: 28px;
+      .slit-table thead th.col-os {
+        color: var(--os);
+        background: var(--os-light);
+        border-radius: 0 var(--radius-sm) 0 0;
         text-align: center;
       }
-
-      /* Slit Lamp Table */
-      .slit-lamp-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        margin-top: 4px;
+      .slit-table tbody tr {
+        border-top: 1px solid var(--border);
       }
-      .slit-lamp-table th,
-      .slit-lamp-table td {
-        padding: 10px 10px;
+      .slit-table tbody tr:hover td { background: #fafbff; }
+      .slit-table td {
+        padding: 8px 12px;
+        vertical-align: middle;
+      }
+      .slit-table td.struct-cell {
         text-align: center;
-        border: 1px solid #e2e8f0;
-      }
-      .slit-lamp-table thead tr th {
-        background: #f1f5f9;
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: #475569;
-      }
-      .slit-lamp-table thead tr th.od-head {
-        background: #dbeafe;
-        color: #1e40af;
-      }
-      .slit-lamp-table thead tr th.os-head {
-        background: #dcfce7;
-        color: #166534;
-      }
-      .slit-lamp-table thead tr th.struct-head {
-        background: #f8fafc;
-        color: #64748b;
-      }
-      .slit-lamp-table tbody tr:nth-child(even) td {
+        color: var(--muted);
         background: #f8fafc;
       }
-      .slit-lamp-table tbody tr:hover td {
-        background: #eff6ff;
-      }
-      .slit-lamp-table td.struct-name {
-        font-size: 0.82rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #475569;
-        background: #f1f5f9;
-        width: 110px;
-      }
-      .slit-lamp-table td input {
+      .slit-table td.od-cell,
+      .slit-table td.os-cell { text-align: center; }
+      .slit-table td input {
         width: 100%;
-        border: 1.5px solid #d1dbe8;
-        border-radius: 6px;
-        padding: 7px 8px;
-        font-size: 0.97rem;
-        text-align: center;
-        background: white;
-        outline: none;
         font-family: inherit;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
+        font-size: 0.93rem;
+        color: var(--text);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        padding: 6px 10px;
+        outline: none;
+        text-align: center;
+        transition: background 0.15s, border-color 0.15s;
+        line-height: 1.4;
       }
-      .slit-lamp-table td input:focus {
-        border-color: #1a56db;
-        box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
+      .slit-table td.od-cell input:hover,
+      .slit-table td.od-cell input:focus {
+        background: var(--od-light);
+        border-color: var(--od-mid);
+      }
+      .slit-table td.os-cell input:hover,
+      .slit-table td.os-cell input:focus {
+        background: var(--os-light);
+        border-color: var(--os-mid);
       }
 
-      /* Findings grid */
+      /* ── FINDINGS 2-COL ── */
       .findings-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: 0;
       }
-      @media (max-width: 580px) {
-        .findings-grid,
-        .grid-2,
-        .grid-3 {
-          grid-template-columns: 1fr;
-        }
-        .va-row {
-          grid-template-columns: 1fr;
-        }
-        .va-slash {
-          display: none;
-        }
+      .finding-item {
+        padding: 16px 20px 18px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .finding-item:nth-child(2n) { border-right: none; }
+      .finding-item:nth-last-child(-n+2) { border-bottom: none; }
+      .finding-item:last-child:nth-child(odd) {
+        border-bottom: none;
+        border-right: none;
+        grid-column: 1 / -1;
       }
 
-      /* Actions */
-      .actions {
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-        flex-wrap: wrap;
+      /* ── IMP / PLAN ── */
+      .imp-plan-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
       }
-      button {
-        padding: 11px 28px;
-        border-radius: 8px;
-        font-size: 0.9rem;
+      .imp-plan-grid > div {
+        padding: 16px 20px 18px;
+      }
+      .imp-plan-grid > div + div {
+        border-left: 1px solid var(--border);
+      }
+      .imp-plan-grid textarea { min-height: 90px; }
+
+      /* ── ACTION BAR ── */
+      .action-bar {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        background: rgba(15,23,42,0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 10px 14px;
+        border-radius: 50px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        z-index: 200;
+      }
+      .action-bar button {
+        padding: 9px 22px;
+        border-radius: 50px;
+        font-size: 0.85rem;
         font-weight: 600;
+        font-family: inherit;
         cursor: pointer;
         border: none;
-        transition:
-          background 0.18s,
-          transform 0.1s;
+        letter-spacing: 0.02em;
+        transition: background 0.16s, transform 0.1s, opacity 0.16s;
+        white-space: nowrap;
       }
-      button:active {
-        transform: scale(0.97);
+      .action-bar button:active { transform: scale(0.95); }
+      .btn-clear {
+        background: rgba(220,38,38,0.18);
+        color: #fca5a5;
+        border: 1px solid rgba(220,38,38,0.25) !important;
       }
-      .btn-primary {
-        background: #1a56db;
-        color: white;
+      .btn-clear:hover { background: rgba(220,38,38,0.28); }
+      .btn-print {
+        background: rgba(255,255,255,0.1);
+        color: #cbd5e1;
+        border: 1px solid rgba(255,255,255,0.12) !important;
       }
-      .btn-primary:hover {
-        background: #1648c0;
-      }
-      .btn-secondary {
-        background: #e2e8f0;
-        color: #374151;
-      }
-      .btn-secondary:hover {
-        background: #cbd5e1;
-      }
-      .btn-danger {
-        background: #fee2e2;
-        color: #991b1b;
-      }
-      .btn-danger:hover {
-        background: #fecaca;
-      }
+      .btn-print:hover { background: rgba(255,255,255,0.18); }
       .btn-copy {
-        background: #1a56db;
+        background: var(--accent);
         color: white;
-        border: none;
       }
-      .btn-copy:hover {
-        background: #1648c0;
-      }
+      .btn-copy:hover { background: #4338ca; }
 
-      /* Print preview */
-      .print-area {
-        display: none;
-      }
-      @media print {
-        body {
-          background: white;
-        }
-        header,
-        .actions,
-        .card-title {
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
-        }
-        .print-hide {
-          display: none;
-        }
-      }
-
-      /* Toast */
+      /* ── TOAST ── */
       #toast {
         position: fixed;
-        bottom: 32px;
-        right: 32px;
-        background: #1a56db;
-        color: white;
-        padding: 14px 24px;
-        border-radius: 10px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-        transform: translateY(80px);
+        bottom: 88px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #0f172a;
+        color: #f8fafc;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         opacity: 0;
-        transition:
-          transform 0.3s,
-          opacity 0.3s;
-        z-index: 999;
+        pointer-events: none;
+        transition: opacity 0.25s, transform 0.25s;
+        z-index: 300;
+        white-space: nowrap;
       }
       #toast.show {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 600px) {
+        header {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto;
+          height: auto;
+          padding: 14px 20px;
+          text-align: center;
+          gap: 4px;
+        }
+        header > div:first-child { display: none; }
+        .header-title { grid-column: 1; }
+        .header-date { grid-column: 1; justify-self: center; }
+
+        .cols-2, .va-grid, .findings-grid, .imp-plan-grid {
+          grid-template-columns: 1fr;
+        }
+        .cols-2 > div + div { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 4px; }
+        .finding-item { border-right: none; }
+        .imp-plan-grid > div + div { border-left: none; border-top: 1px solid var(--border); }
+      }
+
+      /* ── PRINT ── */
+      @media print {
+        body { background: white; padding-bottom: 0; }
+        header { position: static; }
+        .action-bar { display: none; }
+        .section:focus-within { box-shadow: none; border-color: var(--border); }
       }
     </style>
   </head>
   <body>
+
     <header>
-      <h1>Doctor Notes Template</h1>
-      <span id="datetime"></span>
+      <div></div>
+      <div class="header-title">Doctor Notes Template</div>
+      <div class="header-date" id="datetime"></div>
     </header>
 
-    <div class="container">
-      <!-- Presentation -->
-      <div class="card">
-        <div class="card-title">Patient Presented With</div>
-        <textarea
-          id="presentedWith"
-          placeholder="Chief complaint / presenting complaint..."></textarea>
+    <div class="page">
+
+      <!-- Patient Presented With -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-tag">Presented With</span>
+          <div class="section-rule"></div>
+        </div>
+        <div class="section-body">
+          <textarea id="presentedWith" placeholder="Chief complaint / presenting complaint…" rows="2"></textarea>
+        </div>
       </div>
 
       <!-- KCO & O/E -->
-      <div class="card">
-        <div class="grid-2">
-          <div>
-            <div class="card-title">KCO (Known Case Of)</div>
-            <textarea id="kco" placeholder="Known diagnoses..." style="min-height: 80px"></textarea>
-          </div>
-          <div>
-            <div class="card-title">O/E (On Examination)</div>
-            <textarea
-              id="oe"
-              placeholder="General examination findings..."
-              style="min-height: 80px"></textarea>
+      <div class="section">
+        <div class="section-body" style="padding-top:20px;">
+          <div class="cols-2">
+            <div>
+              <div class="field-label">KCO — Known Case Of</div>
+              <textarea id="kco" placeholder="Known diagnoses…" rows="3"></textarea>
+            </div>
+            <div>
+              <div class="field-label">O/E — On Examination</div>
+              <textarea id="oe" placeholder="General examination findings…" rows="3"></textarea>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Visual Acuity -->
-      <div class="card">
-        <div class="card-title">UAVA — Unaided Visual Acuity</div>
-        <div class="va-row">
-          <div>
-            <div class="va-eye-label"><span class="eye-badge od">OD — Right Eye</span></div>
-            <div class="va-group">
-              <input type="text" id="vaODNum" placeholder="20" />
-              <span class="va-denom">/</span>
-              <span class="va-fixed">20</span>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-tag">UAVA — Unaided Visual Acuity</span>
+          <div class="section-rule"></div>
+        </div>
+        <div class="section-body">
+          <div class="va-grid">
+            <div class="va-eye od">
+              <div class="va-eye-label">OD &mdash; Right Eye</div>
+              <div class="va-fraction">
+                <input type="text" id="vaODNum" placeholder="20" />
+                <span class="va-slash">/</span>
+                <span class="va-denom">20</span>
+              </div>
             </div>
-          </div>
-          <div class="va-slash">/</div>
-          <div>
-            <div class="va-eye-label"><span class="eye-badge os">OS — Left Eye</span></div>
-            <div class="va-group">
-              <input type="text" id="vaOSNum" placeholder="20" />
-              <span class="va-denom">/</span>
-              <span class="va-fixed">20</span>
+            <div class="va-eye os">
+              <div class="va-eye-label">OS &mdash; Left Eye</div>
+              <div class="va-fraction">
+                <input type="text" id="vaOSNum" placeholder="20" />
+                <span class="va-slash">/</span>
+                <span class="va-denom">20</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Slit Lamp Examination -->
-      <div class="card">
-        <div class="card-title">Slit Lamp Examination</div>
-        <table class="slit-lamp-table">
-          <thead>
-            <tr>
-              <th class="od-head">OD (Right)</th>
-              <th class="struct-head">Structure</th>
-              <th class="os-head">OS (Left)</th>
-            </tr>
-          </thead>
-          <tbody id="slitLampBody">
-            <!-- Rows injected by JS -->
-          </tbody>
-        </table>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-tag">Slit Lamp Examination</span>
+          <div class="section-rule"></div>
+        </div>
+        <div class="section-body" style="padding: 0 0 4px;">
+          <table class="slit-table">
+            <thead>
+              <tr>
+                <th class="col-od">OD — Right Eye</th>
+                <th class="col-struct">Structure</th>
+                <th class="col-os">OS — Left Eye</th>
+              </tr>
+            </thead>
+            <tbody id="slitLampBody"></tbody>
+          </table>
+        </div>
       </div>
 
-      <!-- Fundus & Orthoptic -->
-      <div class="card">
+      <!-- Findings -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-tag">Clinical Findings</span>
+          <div class="section-rule"></div>
+        </div>
         <div class="findings-grid">
-          <div>
-            <div class="card-title">Fundus</div>
-            <textarea id="fundus" placeholder="Fundus findings..."></textarea>
+          <div class="finding-item">
+            <div class="field-label">Fundus</div>
+            <textarea id="fundus" placeholder="Fundus findings…" rows="2"></textarea>
           </div>
-          <div>
-            <div class="card-title">Orthoptic</div>
-            <textarea id="orthoptic" placeholder="Orthoptic findings..."></textarea>
+          <div class="finding-item">
+            <div class="field-label">Orthoptic</div>
+            <textarea id="orthoptic" placeholder="Orthoptic findings…" rows="2"></textarea>
           </div>
-          <div>
-            <div class="card-title">FP (Fundus Photography)</div>
-            <textarea id="fp" placeholder="FP findings..."></textarea>
+          <div class="finding-item">
+            <div class="field-label">FP — Fundus Photography</div>
+            <textarea id="fp" placeholder="FP findings…" rows="2"></textarea>
           </div>
-          <div>
-            <div class="card-title">Abnormal Head Posture</div>
-            <textarea id="ahp" placeholder="Head posture findings..."></textarea>
+          <div class="finding-item">
+            <div class="field-label">Abnormal Head Posture</div>
+            <textarea id="ahp" placeholder="Head posture findings…" rows="2"></textarea>
           </div>
-          <div>
-            <div class="card-title">Nystagmus</div>
-            <textarea id="nystagmus" placeholder="Nystagmus findings..."></textarea>
+          <div class="finding-item">
+            <div class="field-label">Nystagmus</div>
+            <textarea id="nystagmus" placeholder="Nystagmus findings…" rows="2"></textarea>
           </div>
-          <div>
-            <div class="card-title">EOM (Extra Ocular Movements)</div>
-            <textarea id="eom" placeholder="EOM findings..."></textarea>
+          <div class="finding-item">
+            <div class="field-label">EOM — Extra Ocular Movements</div>
+            <textarea id="eom" placeholder="EOM findings…" rows="2"></textarea>
           </div>
         </div>
       </div>
 
       <!-- ARCT -->
-      <div class="card">
-        <div class="card-title">ARCT</div>
-        <textarea id="arct" placeholder="ARCT findings..."></textarea>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-tag">ARCT</span>
+          <div class="section-rule"></div>
+        </div>
+        <div class="section-body">
+          <textarea id="arct" placeholder="ARCT findings…" rows="2"></textarea>
+        </div>
       </div>
 
       <!-- Impression & Plan -->
-      <div class="card">
-        <div class="grid-2">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-tag">Impression &amp; Plan</span>
+          <div class="section-rule"></div>
+        </div>
+        <div class="imp-plan-grid">
           <div>
-            <div class="card-title">IMP (Impression / Diagnosis)</div>
-            <textarea
-              id="imp"
-              placeholder="Clinical impression / diagnosis..."
-              style="min-height: 100px"></textarea>
+            <div class="field-label">IMP — Impression / Diagnosis</div>
+            <textarea id="imp" placeholder="Clinical impression / diagnosis…" rows="4"></textarea>
           </div>
           <div>
-            <div class="card-title">Plan</div>
-            <textarea
-              id="plan"
-              placeholder="Management plan, investigations, referrals..."
-              style="min-height: 100px"></textarea>
+            <div class="field-label">Plan</div>
+            <textarea id="plan" placeholder="Management plan, investigations, referrals…" rows="4"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- Actions -->
-      <div class="card print-hide">
-        <div class="actions">
-          <button class="btn-danger" onclick="clearForm()">Clear Form</button>
-          <button class="btn-secondary" onclick="window.print()">Print / Save PDF</button>
-          <button class="btn-copy" onclick="copyAll()">Copy All</button>
-        </div>
-      </div>
+    </div><!-- /page -->
+
+    <!-- Floating Action Bar -->
+    <div class="action-bar">
+      <button class="btn-clear" onclick="clearForm()">Clear</button>
+      <button class="btn-print" onclick="window.print()">Print</button>
+      <button class="btn-copy"  onclick="copyAll()">Copy All</button>
     </div>
 
     <div id="toast"></div>
 
     <script>
-      // ── Slit lamp rows (structure: [label, OD default, OS default]) ──
       const slitRows = [
-        ["Cornea", "Clear", "Clear"],
-        ["AC", "D&Q", "D&Q"],
-        ["Iris", "Healthy", "Healthy"],
-        ["Pupil", "RRR, (-) APD", "RRR, (-) APD"],
-        ["Lens", "Clear", "Clear"],
+        ["Cornea", "Clear",        "Clear"],
+        ["AC",     "D&Q",          "D&Q"],
+        ["Iris",   "Healthy",      "Healthy"],
+        ["Pupil",  "RRR, (-) APD", "RRR, (-) APD"],
+        ["Lens",   "Clear",        "Clear"],
       ];
 
       function buildSlitLamp() {
         const tbody = document.getElementById("slitLampBody");
         slitRows.forEach(([struct, odDef, osDef]) => {
           const tr = document.createElement("tr");
-          tr.innerHTML = `
-        <td><input type="text" value="${odDef}" data-struct="${struct}" data-side="od" /></td>
-        <td class="struct-name">${struct}</td>
-        <td><input type="text" value="${osDef}" data-struct="${struct}" data-side="os" /></td>`;
+          tr.innerHTML =
+            `<td class="od-cell"><input type="text" value="${odDef}" data-struct="${struct}" data-side="od" /></td>` +
+            `<td class="struct-cell">${struct}</td>` +
+            `<td class="os-cell"><input type="text" value="${osDef}" data-struct="${struct}" data-side="os" /></td>`;
           tbody.appendChild(tr);
         });
       }
 
-      // ── Date/time header ──
-      function updateClock() {
-        const el = document.getElementById("datetime");
-        const now = new Date();
-        el.textContent = now.toLocaleString("en-GB", {
-          weekday: "short",
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
+      function updateDate() {
+        document.getElementById("datetime").textContent = new Date().toLocaleDateString("en-GB", {
+          weekday: "short", day: "2-digit", month: "short", year: "numeric",
         });
       }
 
-      function v(id) {
-        return document.getElementById(id).value;
-      }
-      function sv(id, val) {
-        const el = document.getElementById(id);
-        if (el) el.value = val ?? "";
-      }
-
-      function line(label, val) {
-        return val && val.trim() ? label + ": " + val.trim() + "\n" : "";
-      }
+      function v(id) { return document.getElementById(id).value; }
+      function sv(id, val) { const el = document.getElementById(id); if (el) el.value = val ?? ""; }
+      function line(label, val) { return val && val.trim() ? label + ": " + val.trim() + "\n" : ""; }
 
       function copyAll() {
         const vaOD = (v("vaODNum") || "__") + "/20";
         const vaOS = (v("vaOSNum") || "__") + "/20";
 
-        let slitText = "\nSLIT LAMP:\n";
-        slitText += "Structure".padEnd(14) + "OD".padEnd(22) + "OS\n";
-        slitText += "-".repeat(54) + "\n";
-        document.querySelectorAll("#slitLampBody tr").forEach((tr) => {
+        let slit = "\nSLIT LAMP:\n" + "─".repeat(52) + "\n";
+        slit += "OD".padEnd(22) + "Structure".padEnd(14) + "OS\n" + "─".repeat(52) + "\n";
+        document.querySelectorAll("#slitLampBody tr").forEach(tr => {
           const inputs = tr.querySelectorAll("input");
-          const struct = tr.querySelector(".struct-name")?.textContent ?? "";
-          const od = inputs[0]?.value ?? "";
-          const os = inputs[1]?.value ?? "";
-          slitText += struct.padEnd(14) + od.padEnd(22) + os + "\n";
+          const struct = tr.querySelector(".struct-cell")?.textContent ?? "";
+          slit += (inputs[0]?.value ?? "").padEnd(22) + struct.padEnd(14) + (inputs[1]?.value ?? "") + "\n";
         });
 
         let text = "";
         text += line("PATIENT PRESENTED WITH", v("presentedWith"));
         text += line("KCO", v("kco"));
         text += line("O/E", v("oe"));
-        text += "UAVA: OD: " + vaOD + "   OS: " + vaOS + "\n";
-        text += slitText;
+        text += "UAVA: OD " + vaOD + "   OS " + vaOS + "\n";
+        text += slit;
         text += line("\nFUNDUS", v("fundus"));
         text += line("ORTHOPTIC", v("orthoptic"));
         text += line("FP", v("fp"));
@@ -581,63 +665,38 @@
         text += line("\nIMP", v("imp"));
         text += line("PLAN", v("plan"));
 
-        navigator.clipboard
-          .writeText(text.trim())
-          .then(() => {
-            showToast("Copied to clipboard!");
-          })
-          .catch(() => {
-            // fallback for older browsers
-            const ta = document.createElement("textarea");
-            ta.value = text.trim();
-            ta.style.position = "fixed";
-            ta.style.opacity = "0";
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand("copy");
-            document.body.removeChild(ta);
-            showToast("Copied to clipboard!");
+        navigator.clipboard.writeText(text.trim()).then(() => toast("Copied to clipboard")).catch(() => {
+          const ta = Object.assign(document.createElement("textarea"), {
+            value: text.trim(), style: "position:fixed;opacity:0"
           });
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          toast("Copied to clipboard");
+        });
       }
 
       function clearForm() {
         if (!confirm("Clear all fields and reset to defaults?")) return;
-        [
-          "presentedWith",
-          "kco",
-          "oe",
-          "vaODNum",
-          "vaODDen",
-          "vaOSNum",
-          "vaOSDen",
-          "fundus",
-          "orthoptic",
-          "fp",
-          "ahp",
-          "nystagmus",
-          "eom",
-          "arct",
-          "imp",
-          "plan",
-        ].forEach((id) => sv(id, ""));
-        document.querySelectorAll("#slitLampBody input").forEach((inp) => {
-          const row = slitRows.find((r) => r[0] === inp.dataset.struct);
+        ["presentedWith","kco","oe","vaODNum","vaOSNum","fundus","orthoptic",
+         "fp","ahp","nystagmus","eom","arct","imp","plan"].forEach(id => sv(id, ""));
+        document.querySelectorAll("#slitLampBody input").forEach(inp => {
+          const row = slitRows.find(r => r[0] === inp.dataset.struct);
           if (row) inp.value = inp.dataset.side === "od" ? row[1] : row[2];
         });
-        showToast("Form cleared.");
+        toast("Form cleared");
       }
 
-      function showToast(msg) {
-        const t = document.getElementById("toast");
-        t.textContent = msg;
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 2800);
+      function toast(msg) {
+        const el = document.getElementById("toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 2400);
       }
 
-      // ── Init ──
       buildSlitLamp();
-      updateClock();
-      setInterval(updateClock, 60000);
+      updateDate();
     </script>
   </body>
 </html>
